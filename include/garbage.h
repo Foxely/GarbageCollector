@@ -9,6 +9,7 @@
 #define _GARBAGE_
 
 #include <stdlib.h>
+#include "generic_list.h"
 
 #define STACK_MAX (256)
 
@@ -24,6 +25,7 @@ typedef struct s_object {
     size_t hash;
     int id;
     struct s_object *next;
+    size_t l_size;
 
     union {
         int value;
@@ -38,6 +40,7 @@ typedef struct {
     int num_objects;
     int max_objects;
     int object_collected;
+    list_t v_free;
 } gc_t;
 
 ////////////////////////////////////////////////////////

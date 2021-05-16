@@ -1,0 +1,19 @@
+REP:.
+NAME:list
+COMPILEFLAGS:-std=c++11 -Wall -Wextra
+INCLUDES:.
+LIBS:
+LDFLAGS:
+SRCPATH:.
+LIBRARY:yes
+DEBUG:yes
+CC:g++
+D_CC:g++
+D_CFLAGS: -g3 -std=gnu11 -Wall -Wextra
+D_LDFLAGS:
+ARCHIVE:
+list_add.c
+list_delete.c
+list_get.c
+list_getnode.c
+list_utils.c

@@ -14,7 +14,8 @@ void sweep(gc_t *vm)
         if ((*object)->marked == 0) {
             object_t *unreached = *object;
             *object = unreached->next;
-            free(unreached);
+            list_add_elem_at_front(&vm->v_free, unreached);
+            // free(unreached);
             vm->num_objects--;
         } else {
             (*object)->marked = 0;

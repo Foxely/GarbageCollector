@@ -11,7 +11,8 @@
 
 static inline gc_t *gc_static;
 
-int assert(int condition, const char *message) {
+int assert(int condition, const char *message)
+{
     if (!condition) {
         printf("%s\n", message);
         return (1);
@@ -38,19 +39,37 @@ gc_t *my_gc_new(void)
     vm->first_object = NULL;
     vm->num_objects = 0;
     vm->max_objects = 8;
+    list_init(&vm->v_free, 0);
     gc_static = vm;
     return (vm);
+}
+
+int search_first_size(void *data, void *p_size)
+{
+    size_t l_size_to_find = *(size_t *) p_size;
+    object_t *p_obj = (object_t *) data;
+
+    return 0;
 }
 
 object_t *new_object(gc_t *vm, object_type type, size_t size)
 {
     if (vm->num_objects >= vm->max_objects)
         gc_run(vm);
-    object_t *object = malloc(sizeof(object_t) + size);
+    object_t *object = 0;
+    node_t *p_found = list_get_first_node_with_value(&vm->v_free, &size, &search_first_size);
+    if (p_found) {
+        object = (object_t *) p_found->value;
+        list_del_node(&vm->v_free, p_found);
+    } else {
+        object = malloc(sizeof(object_t) + size);
+        printf("alloc\n");
+    }
     object->type = type;
     object->next = vm->first_object;
-    vm->first_object = object;
     object->marked = 0;
+    object->l_size = size;
+    vm->first_object = object;
     vm->num_objects++;
     return (object);
 }
